@@ -14,6 +14,7 @@ microservice to handle approval process for published blog.
 1. Spring Eureuka URL: http://localhost:8761/
 2. Swagger UI for Gateway App: http://localhost:8090/swagger-ui.html
 3. Swagger UI for Blog Microservices: http://localhost:8081/swagger-ui.html
+4. Swagger UI for Approval Microservices: http://localhost:8087/swagger-ui.html
 
 ## The Stacks:
 1. Springboot 2.1.6
