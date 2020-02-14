@@ -2,6 +2,7 @@ package com.mitrais.cdc.approvalmicroservice.controller;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
 import com.mitrais.cdc.approvalmicroservice.services.ApprovalService;
+import com.mitrais.cdc.approvalmicroservice.services.KafkaMessageServices;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,11 @@ import java.util.List;
 public class ApprovalController extends CrossOriginController{
 
     private ApprovalService approvalService;
+    private KafkaMessageServices kafkaMessageServices;
 
-    public ApprovalController(ApprovalService approvalService) {
+    public ApprovalController(ApprovalService approvalService, KafkaMessageServices kafkaMessageServices) {
         this.approvalService = approvalService;
+        this.kafkaMessageServices = kafkaMessageServices;
     }
 
     @GetMapping("/approval-list")
@@ -25,6 +28,18 @@ public class ApprovalController extends CrossOriginController{
 
     @PostMapping("/process")
     public ResponseEntity<BlogApprovalInProgress> updateProgressStatus(@RequestParam("id") int id, @RequestParam("status") String status, @RequestParam("progress") String progress){
-        return ResponseEntity.ok(approvalService.updateProgressStatus(id, status, progress));
+
+        BlogApprovalInProgress blogApprovalInProgress = approvalService.updateProgressStatus(id, status, progress);;
+
+        /*
+        * Only send Update Status event to Message Broker
+        * when status either approved or rejected with progress Done
+        * **/
+
+        if((status.equals("Approved") && progress.equals("Done")) || (status.equals("Rejected") && progress.equals("Done")) ){
+            kafkaMessageServices.updateBlogStatus(blogApprovalInProgress);
+        }
+
+        return ResponseEntity.ok(blogApprovalInProgress);
     }
 }

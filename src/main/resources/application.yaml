@@ -24,6 +24,9 @@ spring:
         BlogCreationInput:
           destination:  blog-creation
           content-type: application/json
+        BlogApprovalOutput:
+          destination:  blog-approval
+          content-type: application/json
       kafka:
         binder:
           zkNodes: localhost

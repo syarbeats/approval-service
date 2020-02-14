@@ -7,6 +7,7 @@ import com.mitrais.cdc.approvalmicroservice.utility.KafkaCustomChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -32,6 +33,11 @@ public class KafkaMessageServices {
         blogApprovalInProgress.setSummary(postPayload.getSummary());
         blogApprovalInProgress.setApprovalProgress("To Do");
         blogApprovalInProgressRepository.save(blogApprovalInProgress);
+    }
+
+    public void updateBlogStatus(BlogApprovalInProgress blogApprovalInProgress){
+        this.kafkaCustomChannel.blogApprovalPubChannel().send(MessageBuilder.withPayload(blogApprovalInProgress).build());
+        log.info("Update blog status...");
     }
 
 }
