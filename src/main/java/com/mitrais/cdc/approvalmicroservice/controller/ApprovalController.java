@@ -24,7 +24,7 @@ public class ApprovalController extends CrossOriginController{
     }
 
     @PostMapping("/process")
-    public ResponseEntity<BlogApprovalInProgress> updateProgressStatus(@RequestParam("id") int id, @RequestParam("status") String status){
-        return ResponseEntity.ok(approvalService.updateProgressStatus(id, status));
+    public ResponseEntity<BlogApprovalInProgress> updateProgressStatus(@RequestParam("id") int id, @RequestParam("status") String status, @RequestParam("progress") String progress){
+        return ResponseEntity.ok(approvalService.updateProgressStatus(id, status, progress));
     }
 }

@@ -23,9 +23,16 @@ public class ApprovalService {
         return  blogApprovalInProgressRepository.findApprovalDataByProgress(approvalProgress, pageable);
     }
 
-    public BlogApprovalInProgress updateProgressStatus(int id, String status){
+    public BlogApprovalInProgress updateProgressStatus(int id, String status, String progress){
         BlogApprovalInProgress blogApprovalInProgress = blogApprovalInProgressRepository.findById(id).get();
-        blogApprovalInProgress.setApprovalProgress(status);
+
+        if(status.equals("Approved")){
+            blogApprovalInProgress.setStatus(true);
+        }else {
+            blogApprovalInProgress.setStatus(false);
+        }
+
+        blogApprovalInProgress.setApprovalProgress(progress);
 
         return blogApprovalInProgressRepository.save(blogApprovalInProgress) ;
     }
