@@ -14,4 +14,7 @@ public interface BlogApprovalInProgressRepository extends JpaRepository<BlogAppr
 
     @Query("SELECT b FROM BlogApprovalInProgress b WHERE b.approvalProgress = :approvalProgress")
     Page<BlogApprovalInProgress> findApprovalDataByProgress(String approvalProgress, Pageable pageable);
+
+    @Query("SELECT case when count(b)> 0 then true else false end FROM BlogApprovalInProgress b WHERE b.title = :title")
+    boolean isExistByTitle(String title);
 }

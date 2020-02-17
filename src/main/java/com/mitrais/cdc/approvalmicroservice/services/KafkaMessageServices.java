@@ -25,14 +25,18 @@ public class KafkaMessageServices {
     @StreamListener("BlogCreationInput")
     public void subscribeBlogCreationMessage(@Payload PostPayload postPayload) {
         log.info("[APPROVAL REQUEST] Receive Blog Creation data:"+postPayload.getTitle());
-        BlogApprovalInProgress blogApprovalInProgress = new BlogApprovalInProgress();
-        blogApprovalInProgress.setTitle(postPayload.getTitle());
-        blogApprovalInProgress.setCategoryId(postPayload.getCategoryId());
-        blogApprovalInProgress.setCategoryName(postPayload.getCategoryName());
-        blogApprovalInProgress.setCreatedDate(postPayload.getCreatedDate());
-        blogApprovalInProgress.setSummary(postPayload.getSummary());
-        blogApprovalInProgress.setApprovalProgress("To Do");
-        blogApprovalInProgressRepository.save(blogApprovalInProgress);
+
+        if(!blogApprovalInProgressRepository.isExistByTitle(postPayload.getTitle())){
+            BlogApprovalInProgress blogApprovalInProgress = new BlogApprovalInProgress();
+            blogApprovalInProgress.setTitle(postPayload.getTitle());
+            blogApprovalInProgress.setCategoryId(postPayload.getCategoryId());
+            blogApprovalInProgress.setCategoryName(postPayload.getCategoryName());
+            blogApprovalInProgress.setCreatedDate(postPayload.getCreatedDate());
+            blogApprovalInProgress.setSummary(postPayload.getSummary());
+            blogApprovalInProgress.setApprovalProgress("To Do");
+            blogApprovalInProgressRepository.save(blogApprovalInProgress);
+        }
+
     }
 
     public void updateBlogStatus(BlogApprovalInProgress blogApprovalInProgress){
