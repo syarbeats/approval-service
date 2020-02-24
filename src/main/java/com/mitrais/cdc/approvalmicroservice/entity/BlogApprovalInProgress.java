@@ -28,7 +28,7 @@ public class BlogApprovalInProgress {
     private boolean status;
     private String approvalProgress;
 
-    public BlogApprovalInProgress(@NotNull String title, String summary, ZonedDateTime createdDate, Long categoryId, String categoryName, boolean status, String approvalProgress) {
+    public BlogApprovalInProgress(@NotNull String title, String summary, ZonedDateTime createdDate, Long categoryId, String categoryName, boolean status, String approvalProgress, String key) {
         this.title = title;
         this.summary = summary;
         this.createdDate = createdDate;

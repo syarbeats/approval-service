@@ -1,20 +1,30 @@
 package com.mitrais.cdc.approvalmicroservice.controller;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
+import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.services.ApprovalService;
 import com.mitrais.cdc.approvalmicroservice.services.KafkaMessageServices;
+import com.mitrais.cdc.approvalmicroservice.services.NotificationServices;
+import com.mitrais.cdc.approvalmicroservice.utility.UserContextHolder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping("/api")
+@Slf4j
 public class ApprovalController extends CrossOriginController{
 
     private ApprovalService approvalService;
     private KafkaMessageServices kafkaMessageServices;
+
+    @Autowired
+    private NotificationServices notificationServices;
+
 
     public ApprovalController(ApprovalService approvalService, KafkaMessageServices kafkaMessageServices) {
         this.approvalService = approvalService;
@@ -39,6 +49,10 @@ public class ApprovalController extends CrossOriginController{
         if((status.equals("Approved") && progress.equals("Done")) || (status.equals("Rejected") && progress.equals("Done")) ){
             kafkaMessageServices.updateBlogStatus(blogApprovalInProgress);
         }
+
+        log.info("TOKEN[APPROVAL]:"+ UserContextHolder.getContext().getAuthToken());
+        kafkaMessageServices.sendKey(new Key(UserContextHolder.getContext().getAuthToken()));
+        kafkaMessageServices.sendUpdateProgressNotification(blogApprovalInProgress);
 
         return ResponseEntity.ok(blogApprovalInProgress);
     }

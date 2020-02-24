@@ -1,6 +1,7 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
+import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.payload.PostPayload;
 import com.mitrais.cdc.approvalmicroservice.repository.BlogApprovalInProgressRepository;
 import com.mitrais.cdc.approvalmicroservice.utility.KafkaCustomChannel;
@@ -42,6 +43,16 @@ public class KafkaMessageServices {
     public void updateBlogStatus(BlogApprovalInProgress blogApprovalInProgress){
         this.kafkaCustomChannel.blogApprovalPubChannel().send(MessageBuilder.withPayload(blogApprovalInProgress).build());
         log.info("Update blog status...");
+    }
+
+    public void sendUpdateProgressNotification(BlogApprovalInProgress blogApprovalInProgress){
+        this.kafkaCustomChannel.blogApprovalNotificationPubChannel().send(MessageBuilder.withPayload(blogApprovalInProgress).build());
+        log.info("Sent update event to update progress channel");
+    }
+
+    public void sendKey(Key key){
+        this.kafkaCustomChannel.blogPubKey().send(MessageBuilder.withPayload(key).build());
+        log.info("Sent key event...");
     }
 
 }

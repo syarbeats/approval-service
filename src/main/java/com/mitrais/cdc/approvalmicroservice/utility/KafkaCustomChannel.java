@@ -14,4 +14,10 @@ public interface KafkaCustomChannel {
 
     @Output("BlogApprovalOutput")
     MessageChannel blogApprovalPubChannel();
+
+    @Output("BlogApprovalNotificationOutput")
+    MessageChannel blogApprovalNotificationPubChannel();
+
+    @Output("BlogKeyOutput")
+    MessageChannel blogPubKey();
 }
