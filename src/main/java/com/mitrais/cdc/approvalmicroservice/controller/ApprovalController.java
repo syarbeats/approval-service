@@ -2,6 +2,7 @@ package com.mitrais.cdc.approvalmicroservice.controller;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgressResponse;
 import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.services.ApprovalService;
 import com.mitrais.cdc.approvalmicroservice.services.KafkaMessageServices;
@@ -59,7 +60,12 @@ public class ApprovalController extends CrossOriginController{
     }
 
     @GetMapping("/approval-statistic")
-    public ResponseEntity<List<ApprovalNumberPerProgress>> getApprovalStatistic(){
+    public ResponseEntity<List<ApprovalNumberPerProgressResponse>> getApprovalStatistic(){
         return ResponseEntity.ok(approvalService.getApprovalStatistic());
+    }
+
+    @GetMapping("/approval-result-statistic")
+    public ResponseEntity<List<ApprovalNumberPerProgressResponse>> getApprovalResultStatistic(){
+        return ResponseEntity.ok(approvalService.getApprovalResultStatistic());
     }
 }
