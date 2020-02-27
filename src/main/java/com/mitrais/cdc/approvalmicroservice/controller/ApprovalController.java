@@ -1,6 +1,7 @@
 package com.mitrais.cdc.approvalmicroservice.controller;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.services.ApprovalService;
 import com.mitrais.cdc.approvalmicroservice.services.KafkaMessageServices;
@@ -37,7 +38,7 @@ public class ApprovalController extends CrossOriginController{
     }
 
     @PostMapping("/process")
-    public ResponseEntity<BlogApprovalInProgress> updateProgressStatus(@RequestParam("id") int id, @RequestParam("status") String status, @RequestParam("progress") String progress){
+    public ResponseEntity<BlogApprovalInProgress> updateProgressStatus(@RequestParam("id") Long id, @RequestParam("status") String status, @RequestParam("progress") String progress){
 
         BlogApprovalInProgress blogApprovalInProgress = approvalService.updateProgressStatus(id, status, progress);;
 
@@ -55,5 +56,10 @@ public class ApprovalController extends CrossOriginController{
         kafkaMessageServices.sendUpdateProgressNotification(blogApprovalInProgress);
 
         return ResponseEntity.ok(blogApprovalInProgress);
+    }
+
+    @GetMapping("/approval-statistic")
+    public ResponseEntity<List<ApprovalNumberPerProgress>> getApprovalStatistic(){
+        return ResponseEntity.ok(approvalService.getApprovalStatistic());
     }
 }

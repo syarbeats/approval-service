@@ -1,6 +1,7 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.repository.BlogApprovalInProgressRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class ApprovalService {
         return  blogApprovalInProgressRepository.findApprovalDataByProgress(approvalProgress, pageable);
     }
 
-    public BlogApprovalInProgress updateProgressStatus(int id, String status, String progress){
+    public BlogApprovalInProgress updateProgressStatus(Long id, String status, String progress){
         BlogApprovalInProgress blogApprovalInProgress = blogApprovalInProgressRepository.findById(id).get();
 
         if(status.equals("Approved")){
@@ -33,7 +34,10 @@ public class ApprovalService {
         }
 
         blogApprovalInProgress.setApprovalProgress(progress);
-
         return blogApprovalInProgressRepository.save(blogApprovalInProgress) ;
+    }
+
+    public List<ApprovalNumberPerProgress> getApprovalStatistic(){
+        return blogApprovalInProgressRepository.getApprovalStatistic();
     }
 }
