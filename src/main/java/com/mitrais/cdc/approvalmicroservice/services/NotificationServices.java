@@ -1,5 +1,6 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
+import com.mitrais.cdc.approvalmicroservice.payload.BlogStatistic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -33,6 +35,10 @@ public class NotificationServices {
         StringBuilder builder = new StringBuilder();
         builder.append(message);
         this.template.convertAndSend("/topic/message", builder.toString());
+    }
+
+    public void sendObject(List<BlogStatistic> blogStatisticList){
+        this.template.convertAndSend("/topic/statistic", blogStatisticList);
     }
 }
 

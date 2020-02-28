@@ -36,6 +36,7 @@ public class KafkaMessageServices {
             blogApprovalInProgress.setSummary(postPayload.getSummary());
             blogApprovalInProgress.setApprovalProgress("To Do");
             blogApprovalInProgressRepository.save(blogApprovalInProgress);
+            this.sendBlogCreatedEvent(blogApprovalInProgress);
         }
 
     }
@@ -53,6 +54,10 @@ public class KafkaMessageServices {
     public void sendKey(Key key){
         this.kafkaCustomChannel.blogPubKey().send(MessageBuilder.withPayload(key).build());
         log.info("Sent key event...");
+    }
+
+    public void sendBlogCreatedEvent(BlogApprovalInProgress blogApprovalInProgress){
+        this.kafkaCustomChannel.blogNumberPerCategoryPubChannel().send(MessageBuilder.withPayload(blogApprovalInProgress).build());
     }
 
 }
