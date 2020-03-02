@@ -57,6 +57,10 @@ public class ApprovalService {
         return result;
     }
 
+    public List<ApprovalNumberPerProgress> getApprovalStatistiV2(){
+        return blogApprovalInProgressRepository.getApprovalStatistic();
+    }
+
     public long getApprovalNumber(){
         return blogApprovalInProgressRepository.getApprovalNumber().getRownum();
     }

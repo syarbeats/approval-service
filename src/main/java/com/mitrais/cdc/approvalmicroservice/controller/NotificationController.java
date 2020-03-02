@@ -1,5 +1,6 @@
 package com.mitrais.cdc.approvalmicroservice.controller;
 
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.BlogNumberPerCategory;
 import com.mitrais.cdc.approvalmicroservice.payload.BlogStatistic;
 import com.mitrais.cdc.approvalmicroservice.services.NotificationServices;
@@ -35,6 +36,13 @@ public class NotificationController extends CrossOriginController{
     public String updateChartV2(@RequestBody List<BlogNumberPerCategory> blogNumberPerCategoryList){
         log.info("Receive object:"+blogNumberPerCategoryList.get(0).getLabel());
         notificationServices.sendBlogAmountPerCategoryMessage(blogNumberPerCategoryList, "amount");
+        return "OK-Sent";
+    }
+
+    @PostMapping("/update-approval-chart")
+    public String updateApprovalChart(@RequestBody List<ApprovalNumberPerProgress> approvalNumberPerProgressList){
+        log.info("Receive object:"+approvalNumberPerProgressList.get(0).getLabel());
+        notificationServices.sendBlogApprovalStatistic(approvalNumberPerProgressList);
         return "OK-Sent";
     }
 }

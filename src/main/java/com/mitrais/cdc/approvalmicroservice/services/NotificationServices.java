@@ -1,5 +1,6 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.BlogNumberPerCategory;
 import com.mitrais.cdc.approvalmicroservice.payload.BlogStatistic;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,10 @@ public class NotificationServices {
 
     public void sendBlogAmountPerCategoryMessage(List<BlogNumberPerCategory> blogNumberPerCategoryList, String mode){
         this.template.convertAndSend("/topic/blog-number", blogNumberPerCategoryList);
+    }
+
+    public void sendBlogApprovalStatistic(List<ApprovalNumberPerProgress> approvalNumberPerProgresses){
+        this.template.convertAndSend("/topic/approval-statistic", approvalNumberPerProgresses);
     }
 }
 

@@ -39,6 +39,9 @@ spring:
         BlogNumberPerCategoryOutputV2:
           destination:  blog-number-per-category-v2
           content-type: application/json
+        BlogApprovalStatisticOutput:
+          destination:  blog-approval-statistic
+          content-type: application/json
       kafka:
         binder:
           zkNodes: localhost

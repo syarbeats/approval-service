@@ -1,6 +1,7 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.payload.PostPayload;
 import com.mitrais.cdc.approvalmicroservice.repository.BlogApprovalInProgressRepository;
@@ -10,6 +11,8 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -38,6 +41,7 @@ public class KafkaMessageServices {
             blogApprovalInProgressRepository.save(blogApprovalInProgress);
             this.sendBlogCreatedEvent(blogApprovalInProgress);
             this.sendBlogCreatedEventV2(blogApprovalInProgress);
+            this.sendBlogApprovalEvent(blogApprovalInProgressRepository.getApprovalStatistic());
         }
 
     }
@@ -63,6 +67,10 @@ public class KafkaMessageServices {
 
     public void sendBlogCreatedEventV2(BlogApprovalInProgress blogApprovalInProgress){
         this.kafkaCustomChannel.blogNumberPerCategoryPubChannelV2().send(MessageBuilder.withPayload(blogApprovalInProgress).build());
+    }
+
+    public void sendBlogApprovalEvent(List<ApprovalNumberPerProgress> approvalNumberPerProgress){
+        this.kafkaCustomChannel.blogApprovalStatisticOutput().send(MessageBuilder.withPayload(approvalNumberPerProgress).build());
     }
 
 }
