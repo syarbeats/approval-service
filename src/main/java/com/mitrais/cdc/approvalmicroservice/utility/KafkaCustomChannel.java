@@ -23,4 +23,8 @@ public interface KafkaCustomChannel {
 
     @Output("BlogNumberPerCategoryOutput")
     MessageChannel blogNumberPerCategoryPubChannel();
+
+    @Output("BlogNumberPerCategoryOutputV2")
+    MessageChannel blogNumberPerCategoryPubChannelV2();
+
 }

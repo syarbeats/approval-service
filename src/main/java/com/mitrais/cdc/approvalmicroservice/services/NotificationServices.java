@@ -1,5 +1,6 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
+import com.mitrais.cdc.approvalmicroservice.payload.BlogNumberPerCategory;
 import com.mitrais.cdc.approvalmicroservice.payload.BlogStatistic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,12 @@ public class NotificationServices {
         this.template.convertAndSend("/topic/message", builder.toString());
     }
 
-    public void sendObject(List<BlogStatistic> blogStatisticList){
+    public void sendObject(List<BlogStatistic> blogStatisticList, String mode){
         this.template.convertAndSend("/topic/statistic", blogStatisticList);
+    }
+
+    public void sendBlogAmountPerCategoryMessage(List<BlogNumberPerCategory> blogNumberPerCategoryList, String mode){
+        this.template.convertAndSend("/topic/blog-number", blogNumberPerCategoryList);
     }
 }
 
