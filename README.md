@@ -27,6 +27,8 @@ microservice to handle approval process for published blog.
 6. Cucumber for Frontend High Level Testing (Frontend: https://github.com/syarbeats/blog-frontend-application.git)
 7. Chrome Webdriver
 8. Zuul Proxy
+9. Apache Kafka
+10. Websocket
 
 ### Workflow
 
