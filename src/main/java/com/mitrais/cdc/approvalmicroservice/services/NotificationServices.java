@@ -56,5 +56,9 @@ public class NotificationServices {
     public void sendApprovalResultStatistic(List<ApprovalResultStatistic> approvalResultStatistics){
         this.template.convertAndSend("/topic/approval-result-statistic", approvalResultStatistics);
     }
+
+    public void sendApprovalResultStatisticV2(List<ApprovalNumberPerProgressResponse> approvalNumberPerProgressResponses){
+        this.template.convertAndSend("/topic/approval-result-statistic-v2", approvalNumberPerProgressResponses);
+    }
 }
 

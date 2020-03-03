@@ -36,4 +36,7 @@ public interface KafkaCustomChannel {
     @Output("BlogApprovalResultStatisticOutput")
     MessageChannel blogApprovalResultStatisticOutput();
 
+    @Output("BlogApprovalResultStatisticV2Output")
+    MessageChannel blogApprovalResultStatisticV2Output();
+
 }

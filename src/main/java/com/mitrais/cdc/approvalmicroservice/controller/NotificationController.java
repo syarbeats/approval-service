@@ -58,4 +58,10 @@ public class NotificationController extends CrossOriginController{
         return "OK-Sent";
     }
 
+    @PostMapping("/update-approval-result-chart-v2")
+    public String updateApprovalResultChartV2(@RequestBody List<ApprovalNumberPerProgressResponse> approvalNumberPerProgressResponses){
+        log.info("Receive object:"+approvalNumberPerProgressResponses.get(0).getLabel());
+        notificationServices.sendApprovalResultStatisticV2(approvalNumberPerProgressResponses);
+        return "OK-Sent";
+    }
 }

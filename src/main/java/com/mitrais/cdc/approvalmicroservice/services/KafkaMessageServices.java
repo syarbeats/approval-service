@@ -82,4 +82,7 @@ public class KafkaMessageServices {
         this.kafkaCustomChannel.blogApprovalResultStatisticOutput().send(MessageBuilder.withPayload(approvalResultStatistics).build());
     }
 
+    public void sendApprovalResultStatisticV2(List<ApprovalNumberPerProgressResponse> approvalNumberPerProgressResponses){
+        this.kafkaCustomChannel.blogApprovalResultStatisticV2Output().send(MessageBuilder.withPayload(approvalNumberPerProgressResponses).build());
+    }
 }

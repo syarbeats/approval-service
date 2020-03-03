@@ -67,7 +67,7 @@ public class ApprovalService {
 
     public List<ApprovalNumberPerProgressResponse> getApprovalResultStatistic(){
 
-        List<ApprovalResultStatistic> approvalResultList = blogApprovalInProgressRepository.getApprovalResultStatistic();
+        List<ApprovalResultStatistic> approvalResultList = blogApprovalInProgressRepository.getApprovalResultStatistic("Done");
         List<ApprovalNumberPerProgressResponse> results = new ArrayList<>();
         long resultnum = blogApprovalInProgressRepository.getApprovalNumber().getRownum();
 
@@ -82,6 +82,6 @@ public class ApprovalService {
     }
 
     public List<ApprovalResultStatistic> getApprovalResultStatisticV2(){
-        return blogApprovalInProgressRepository.getApprovalResultStatistic();
+        return blogApprovalInProgressRepository.getApprovalResultStatistic("Done");
     }
 }

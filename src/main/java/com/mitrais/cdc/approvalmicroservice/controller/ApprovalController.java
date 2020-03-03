@@ -57,6 +57,7 @@ public class ApprovalController extends CrossOriginController{
         kafkaMessageServices.sendKey(new Key(UserContextHolder.getContext().getAuthToken()));
         kafkaMessageServices.sendUpdateProgressNotification(blogApprovalInProgress);
         kafkaMessageServices.sendApprovalResultStatistic(approvalService.getApprovalResultStatisticV2());
+        kafkaMessageServices.sendApprovalResultStatisticV2(approvalService.getApprovalResultStatistic());
         kafkaMessageServices.sendBlogApprovalEvent(approvalService.getApprovalStatistiV2());
         kafkaMessageServices.sendBlogApprovalV2Event(approvalService.getApprovalStatistic());
 

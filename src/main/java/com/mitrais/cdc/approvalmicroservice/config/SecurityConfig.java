@@ -92,6 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/update-approval-chart**").permitAll()
                 .antMatchers("/update-approval-result-chart**").permitAll()
                 .antMatchers("/update-approval-statistic-v2-chart**").permitAll()
+                .antMatchers("/update-approval-result-chart-v2**").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

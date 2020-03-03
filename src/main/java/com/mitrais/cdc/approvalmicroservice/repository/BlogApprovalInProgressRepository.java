@@ -28,7 +28,7 @@ public interface BlogApprovalInProgressRepository extends JpaRepository<BlogAppr
     @Query("SELECT new com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumber(count(p.approvalProgress))  FROM BlogApprovalInProgress p")
     ApprovalNumber getApprovalNumber();
 
-    @Query("SELECT new com.mitrais.cdc.approvalmicroservice.payload.ApprovalResultStatistic(count(p.status),  case when p.status = true then 'Approved' else 'Rejected' end )  FROM BlogApprovalInProgress p GROUP BY p.status")
-    List<ApprovalResultStatistic> getApprovalResultStatistic();
+    @Query("SELECT new com.mitrais.cdc.approvalmicroservice.payload.ApprovalResultStatistic(count(p.status),  case when p.status = true then 'Approved' else 'Rejected' end )  FROM BlogApprovalInProgress p WHERE p.approvalProgress = :progress GROUP BY p.status")
+    List<ApprovalResultStatistic> getApprovalResultStatistic(String progress);
 
 }
