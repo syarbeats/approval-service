@@ -1,9 +1,7 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
-import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
-import com.mitrais.cdc.approvalmicroservice.payload.Key;
-import com.mitrais.cdc.approvalmicroservice.payload.PostPayload;
+import com.mitrais.cdc.approvalmicroservice.payload.*;
 import com.mitrais.cdc.approvalmicroservice.repository.BlogApprovalInProgressRepository;
 import com.mitrais.cdc.approvalmicroservice.utility.KafkaCustomChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +18,12 @@ public class KafkaMessageServices {
 
     private KafkaCustomChannel kafkaCustomChannel;
     private BlogApprovalInProgressRepository blogApprovalInProgressRepository;
+    private ApprovalService approvalService;
 
-    public KafkaMessageServices(KafkaCustomChannel kafkaCustomChannel,BlogApprovalInProgressRepository blogApprovalInProgressRepository) {
+    public KafkaMessageServices(KafkaCustomChannel kafkaCustomChannel,BlogApprovalInProgressRepository blogApprovalInProgressRepository, ApprovalService approvalService) {
         this.kafkaCustomChannel = kafkaCustomChannel;
         this.blogApprovalInProgressRepository = blogApprovalInProgressRepository;
+        this.approvalService = approvalService;
     }
 
     @StreamListener("BlogCreationInput")
@@ -42,6 +42,7 @@ public class KafkaMessageServices {
             this.sendBlogCreatedEvent(blogApprovalInProgress);
             this.sendBlogCreatedEventV2(blogApprovalInProgress);
             this.sendBlogApprovalEvent(blogApprovalInProgressRepository.getApprovalStatistic());
+            this.sendBlogApprovalV2Event(approvalService.getApprovalStatistic());
         }
 
     }
@@ -71,6 +72,14 @@ public class KafkaMessageServices {
 
     public void sendBlogApprovalEvent(List<ApprovalNumberPerProgress> approvalNumberPerProgress){
         this.kafkaCustomChannel.blogApprovalStatisticOutput().send(MessageBuilder.withPayload(approvalNumberPerProgress).build());
+    }
+
+    public void sendBlogApprovalV2Event(List<ApprovalNumberPerProgressResponse> approvalNumberPerProgressResponses){
+        this.kafkaCustomChannel.blogApprovalStatisticV2Output().send(MessageBuilder.withPayload(approvalNumberPerProgressResponses).build());
+    }
+
+    public void sendApprovalResultStatistic(List<ApprovalResultStatistic> approvalResultStatistics){
+        this.kafkaCustomChannel.blogApprovalResultStatisticOutput().send(MessageBuilder.withPayload(approvalResultStatistics).build());
     }
 
 }

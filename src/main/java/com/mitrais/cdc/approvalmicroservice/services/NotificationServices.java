@@ -1,8 +1,6 @@
 package com.mitrais.cdc.approvalmicroservice.services;
 
-import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
-import com.mitrais.cdc.approvalmicroservice.payload.BlogNumberPerCategory;
-import com.mitrais.cdc.approvalmicroservice.payload.BlogStatistic;
+import com.mitrais.cdc.approvalmicroservice.payload.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -49,6 +47,14 @@ public class NotificationServices {
 
     public void sendBlogApprovalStatistic(List<ApprovalNumberPerProgress> approvalNumberPerProgresses){
         this.template.convertAndSend("/topic/approval-statistic", approvalNumberPerProgresses);
+    }
+
+    public void sendBlogApprovalStatisticv2(List<ApprovalNumberPerProgressResponse> approvalNumberPerProgressResponses){
+        this.template.convertAndSend("/topic/approval-statistic-v2", approvalNumberPerProgressResponses);
+    }
+
+    public void sendApprovalResultStatistic(List<ApprovalResultStatistic> approvalResultStatistics){
+        this.template.convertAndSend("/topic/approval-result-statistic", approvalResultStatistics);
     }
 }
 

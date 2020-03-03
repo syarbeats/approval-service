@@ -1,8 +1,6 @@
 package com.mitrais.cdc.approvalmicroservice.controller;
 
-import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
-import com.mitrais.cdc.approvalmicroservice.payload.BlogNumberPerCategory;
-import com.mitrais.cdc.approvalmicroservice.payload.BlogStatistic;
+import com.mitrais.cdc.approvalmicroservice.payload.*;
 import com.mitrais.cdc.approvalmicroservice.services.NotificationServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -45,4 +43,19 @@ public class NotificationController extends CrossOriginController{
         notificationServices.sendBlogApprovalStatistic(approvalNumberPerProgressList);
         return "OK-Sent";
     }
+
+    @PostMapping("/update-approval-result-chart")
+    public String updateApprovalResultChart(@RequestBody List<ApprovalResultStatistic> approvalResultStatistics){
+        log.info("Receive object:"+approvalResultStatistics.get(0).getLabel());
+        notificationServices.sendApprovalResultStatistic(approvalResultStatistics);
+        return "OK-Sent";
+    }
+
+    @PostMapping("/update-approval-statistic-v2-chart")
+    public String updateApprovalChartV2(@RequestBody List<ApprovalNumberPerProgressResponse> approvalNumberPerProgressResponses){
+        log.info("Receive object:"+approvalNumberPerProgressResponses.get(0).getLabel());
+        notificationServices.sendBlogApprovalStatisticv2(approvalNumberPerProgressResponses);
+        return "OK-Sent";
+    }
+
 }

@@ -50,7 +50,7 @@ public class ApprovalService {
         for(ApprovalNumberPerProgress approvalNumberPerProgress:approvalNumberPerProgressList){
             ApprovalNumberPerProgressResponse response = new ApprovalNumberPerProgressResponse();
             response.setLabel(approvalNumberPerProgress.getLabel());
-            response.setY((Math.round((new Double(approvalNumberPerProgress.getY())/new Double(rownum))*100*(100.0/100.0))));
+            response.setY(((new Double(approvalNumberPerProgress.getY())/new Double(rownum))*100));
             result.add(response);
         }
 
@@ -74,10 +74,14 @@ public class ApprovalService {
         for(ApprovalResultStatistic approvalNumberPerProgress:approvalResultList){
             ApprovalNumberPerProgressResponse response = new ApprovalNumberPerProgressResponse();
             response.setLabel(approvalNumberPerProgress.getLabel());
-            response.setY((Math.round((new Double(approvalNumberPerProgress.getY())/new Double(resultnum))*100*(100.0/100.0))));
+            response.setY(((new Double(approvalNumberPerProgress.getY())/new Double(resultnum))*100));
             results.add(response);
         }
 
         return results;
+    }
+
+    public List<ApprovalResultStatistic> getApprovalResultStatisticV2(){
+        return blogApprovalInProgressRepository.getApprovalResultStatistic();
     }
 }

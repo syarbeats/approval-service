@@ -3,6 +3,7 @@ package com.mitrais.cdc.approvalmicroservice.controller;
 import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgressResponse;
+import com.mitrais.cdc.approvalmicroservice.payload.ApprovalResultStatistic;
 import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.services.ApprovalService;
 import com.mitrais.cdc.approvalmicroservice.services.KafkaMessageServices;
@@ -55,6 +56,9 @@ public class ApprovalController extends CrossOriginController{
         log.info("TOKEN[APPROVAL]:"+ UserContextHolder.getContext().getAuthToken());
         kafkaMessageServices.sendKey(new Key(UserContextHolder.getContext().getAuthToken()));
         kafkaMessageServices.sendUpdateProgressNotification(blogApprovalInProgress);
+        kafkaMessageServices.sendApprovalResultStatistic(approvalService.getApprovalResultStatisticV2());
+        kafkaMessageServices.sendBlogApprovalEvent(approvalService.getApprovalStatistiV2());
+        kafkaMessageServices.sendBlogApprovalV2Event(approvalService.getApprovalStatistic());
 
         return ResponseEntity.ok(blogApprovalInProgress);
     }
@@ -67,5 +71,15 @@ public class ApprovalController extends CrossOriginController{
     @GetMapping("/approval-result-statistic")
     public ResponseEntity<List<ApprovalNumberPerProgressResponse>> getApprovalResultStatistic(){
         return ResponseEntity.ok(approvalService.getApprovalResultStatistic());
+    }
+
+    @GetMapping("/approval-statistic-v2")
+    public ResponseEntity<List<ApprovalNumberPerProgress>> getApprovalStatisticV2(){
+        return ResponseEntity.ok(approvalService.getApprovalStatistiV2());
+    }
+
+    @GetMapping("/approval-result-statistic-v2")
+    public ResponseEntity<List<ApprovalResultStatistic>> getApprovalResultStatisticV2(){
+        return ResponseEntity.ok(approvalService.getApprovalResultStatisticV2());
     }
 }
