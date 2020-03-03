@@ -10,6 +10,7 @@ microservice to handle approval process for published blog.
 3. Blog-app-config: https://github.com/syarbeats/configuration-server.git
 4. Blog Microservice: https://github.com/syarbeats/blog-microservices-v3.git
 5. Gateway microservice: https://github.com/syarbeats/gateway-application-v3.git
+6. Frontend: https://github.com/syarbeats/blog-frontend-application.git
 
 ## URL
 1. Spring Eureuka URL: http://localhost:8761/
