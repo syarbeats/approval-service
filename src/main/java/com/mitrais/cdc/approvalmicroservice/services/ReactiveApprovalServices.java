@@ -4,7 +4,9 @@ import com.mitrais.cdc.approvalmicroservice.entity.BlogApprovalInProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgress;
 import com.mitrais.cdc.approvalmicroservice.payload.ApprovalNumberPerProgressResponse;
 import com.mitrais.cdc.approvalmicroservice.payload.ApprovalResultStatistic;
+import com.mitrais.cdc.approvalmicroservice.payload.Key;
 import com.mitrais.cdc.approvalmicroservice.repository.BlogApprovalInProgressRepository;
+import com.mitrais.cdc.approvalmicroservice.utility.UserContextHolder;
 import io.reactivex.Single;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +19,12 @@ import java.util.List;
 public class ReactiveApprovalServices {
 
     private BlogApprovalInProgressRepository blogApprovalInProgressRepository;
+    private KafkaMessageServices kafkaMessageServices;
+    private ApprovalService approvalService;
 
-    public ReactiveApprovalServices(BlogApprovalInProgressRepository blogApprovalInProgressRepository) {
+    public ReactiveApprovalServices(BlogApprovalInProgressRepository blogApprovalInProgressRepository, KafkaMessageServices kafkaMessageServices) {
         this.blogApprovalInProgressRepository = blogApprovalInProgressRepository;
+        this.kafkaMessageServices = kafkaMessageServices;
     }
 
     public Single<Page<BlogApprovalInProgress>> getAllApprovalBlogData(String approvalProgress, Pageable pageable){
@@ -35,6 +40,23 @@ public class ReactiveApprovalServices {
                 blogApprovalInProgress.setStatus(false);
             }
             blogApprovalInProgress.setApprovalProgress(progress);
+
+            /*
+             * Only send Update Status event to Message Broker
+             * when status either approved or rejected with progress Done
+             * **/
+
+            if((status.equals("Approved") && progress.equals("Done")) || (status.equals("Rejected") && progress.equals("Done")) ){
+                kafkaMessageServices.updateBlogStatus(blogApprovalInProgress);
+            }
+
+            kafkaMessageServices.sendKey(new Key(UserContextHolder.getContext().getAuthToken()));
+            kafkaMessageServices.sendUpdateProgressNotification(blogApprovalInProgress);
+            kafkaMessageServices.sendApprovalResultStatistic(approvalService.getApprovalResultStatisticV2());
+            kafkaMessageServices.sendApprovalResultStatisticV2(approvalService.getApprovalResultStatistic());
+            kafkaMessageServices.sendBlogApprovalEvent(approvalService.getApprovalStatistiV2());
+            kafkaMessageServices.sendBlogApprovalV2Event(approvalService.getApprovalStatistic());
+
             update.onSuccess(blogApprovalInProgress);
         });
     }
